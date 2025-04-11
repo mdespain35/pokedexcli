@@ -31,8 +31,6 @@ func startRepl(cfg *config) {
 			commandArg = words[1]
 		}
 
-		// fmt.Println("name: " + commandName + "\narg: " + commandArg)
-
 		command, exists := getCommands()[commandName]
 		if exists {
 			err := command.callback(cfg, commandArg)
