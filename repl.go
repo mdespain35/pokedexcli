@@ -46,6 +46,10 @@ func startRepl(cfg *config) {
 			}
 			continue
 		} else {
+			if commandName == "pokedex" {
+				pokedex.getPokedex()
+				continue
+			}
 			fmt.Println("Unknown command")
 			continue
 		}
@@ -106,5 +110,16 @@ func getCommands() map[string]cliCommand {
 			description: "Get a description of a captured pokemon",
 			callback:    commandInspect,
 		},
+	}
+}
+
+func (pkd *Pokedex) getPokedex() {
+	if len(pkd.caughtPokemon) == 0 {
+		fmt.Println("The pokedex is empty!")
+	} else {
+		fmt.Println("Your Pokedex:")
+		for p, _ := range pkd.caughtPokemon {
+			fmt.Println(" - " + p)
+		}
 	}
 }
