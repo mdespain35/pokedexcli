@@ -23,7 +23,14 @@ type Pokemon struct {
 	Name       string  `json:"name"`
 	Id         int     `json:"id"`
 	Experience float32 `json:"base_experience"`
-	Types      []struct {
+	Stats      []struct {
+		Base int `json:"base_stat"`
+		Stat struct {
+			Name string `json:"name"`
+			Url  string `json:"url"`
+		} `json:"stat"`
+	} `json:"stats"`
+	Types []struct {
 		Slot int `json:"slot"`
 		Type struct {
 			Name string `json:"name"`
