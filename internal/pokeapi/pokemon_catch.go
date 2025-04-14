@@ -7,41 +7,41 @@ import (
 	"net/http"
 )
 
-func (c *Client) ListPokemon(locationName string) (RespShallowPokemonEnc, error) {
-	if len(locationName) == 0 {
-		return RespShallowPokemonEnc{}, errors.New("please enter a location name to explore")
+func (c *Client) LookUpPokemon(pokemonName string) (Pokemon, error) {
+	if len(pokemonName) == 0 {
+		return Pokemon{}, errors.New("please enter a Pokemon you wish to capture")
 	}
-	url := baseURL + "/location-area/" + locationName
+	url := baseURL + "/pokemon/" + pokemonName
 
 	if val, ok := c.cache.Get(url); ok {
-		pokemonResp := RespShallowPokemonEnc{}
+		pokemonResp := Pokemon{}
 		err := json.Unmarshal(val, &pokemonResp)
 		if err != nil {
-			return RespShallowPokemonEnc{}, err
+			return Pokemon{}, err
 		}
 		return pokemonResp, nil
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return RespShallowPokemonEnc{}, err
+		return Pokemon{}, err
 	}
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return RespShallowPokemonEnc{}, err
+		return Pokemon{}, err
 	}
 	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return RespShallowPokemonEnc{}, err
+		return Pokemon{}, err
 	}
 
-	pokemonResp := RespShallowPokemonEnc{}
+	pokemonResp := Pokemon{}
 	err = json.Unmarshal(data, &pokemonResp)
 	if err != nil {
-		return RespShallowPokemonEnc{}, err
+		return Pokemon{}, err
 	}
 
 	c.cache.Add(url, data)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func commandMap(cfg *config, mapF string) error {
+func commandMap(cfg *config, mapF string, pokedex *Pokedex) error {
 	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationURL)
 	if err != nil {
 		return err
@@ -20,7 +20,7 @@ func commandMap(cfg *config, mapF string) error {
 	return nil
 }
 
-func commandMapBack(cfg *config, mapB string) error {
+func commandMapBack(cfg *config, mapB string, pokedex *Pokedex) error {
 	if cfg.prevLocationURL == nil {
 		return errors.New("you're on the first page")
 	}

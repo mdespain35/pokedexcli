@@ -15,8 +15,15 @@ type config struct {
 	prevLocationURL *string
 }
 
+type Pokedex struct {
+	caughtPokemon map[string]pokeapi.Pokemon
+}
+
 func startRepl(cfg *config) {
 	reader := bufio.NewScanner(os.Stdin)
+	pokedex := Pokedex{
+		caughtPokemon: map[string]pokeapi.Pokemon{},
+	}
 	for {
 		fmt.Print("Pokedex > ")
 		reader.Scan()
@@ -33,7 +40,7 @@ func startRepl(cfg *config) {
 
 		command, exists := getCommands()[commandName]
 		if exists {
-			err := command.callback(cfg, commandArg)
+			err := command.callback(cfg, commandArg, &pokedex)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -59,7 +66,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config, string) error
+	callback    func(*config, string, *Pokedex) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -88,6 +95,11 @@ func getCommands() map[string]cliCommand {
 			name:        "explore",
 			description: "Displays the pokemon that can be found at a location",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Attempt to catch the pokemon you name",
+			callback:    commandCapture,
 		},
 	}
 }

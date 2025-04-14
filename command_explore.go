@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func commandExplore(cfg *config, explore string) error {
+func commandExplore(cfg *config, explore string, pokedex *Pokedex) error {
 	pokemonResp, err := cfg.pokeapiClient.ListPokemon(explore)
 	if err != nil {
 		return err
